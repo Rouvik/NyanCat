@@ -1,0 +1,21 @@
+body {
+    border: 0px;
+    padding: 0px;
+    margin: 0px;
+    overflow: hidden;
+
+    background: url("./Assets/background.jpg");
+    background-position: 0px 0px;
+
+    animation: backAnim 4s linear infinite;
+}
+
+@keyframes backAnim {
+    from {
+        background-position: 0px 0px;
+    }
+
+    to {
+        background-position: -507px 0px;
+    }
+}

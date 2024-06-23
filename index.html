@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nyan!!!</title>
+    <!-- Fonts -->
+    <link rel="stylesheet" href="./Assets/Fonts/tiny5.css">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Collectible sprites -->
+    <img id="donut_sprite" src="./Assets/donut.png" alt="donut" style="display: none;">
+    <img id="pwr_sprite" src="./Assets/pwrup.png" alt="powerup" style="display: none;">
+    <img id="cat_sprite" src="./Assets/nyanFace.png" alt="nyanCatFace" style="display: none;">
+    
+    <!-- Nyan Cat sprite -->
+    <img id="nyan_sprite" src="./Assets/nyan.png" alt="nyan_cat" style="display: none;">
+
+    <!-- Interaction sprites -->
+    <img id="play_button_sprite" src="./Assets/play_button.png" alt="play_button" style="display: none;">
+    <img id="return_button_sprite" src="./Assets/back.png" alt="return_button" style="display: none;">
+    <img id="title_sprite" src="./Assets/title.png" alt="nyan_cat" style="display: none;">
+
+    <!-- Audio -->
+     <audio id="nyanAudio" src="./Assets/original.mp3" loop style="display: none;"></audio>
+    <canvas>Oops! Canvas is not supported in your browser</canvas>
+</body>
+<script src="backgroundGenerator.js"></script>
+<script src="Interaction.js"></script>
+<script src="sprite.js"></script>
+<script src="Game.js"></script>
+<script src="index.js"></script>
+</html>
