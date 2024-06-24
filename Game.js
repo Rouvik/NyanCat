@@ -78,7 +78,7 @@ class Game {
         this.frameSkipDecrementIntervalID = null;
 
         // player sprite
-        this.pos = { x: -70, y: -40 }; // to adjust for nyan cat dimentions
+        this.pos = { x: window.innerWidth < window.innerHeight ? -this.sc.hheight + 10 : -70, y: -40 }; // to adjust for nyan cat dimentions
         this.nyanPlayerSprite = new Sprite(ASSETS.nyanImg, 71, 41, 5, { xOffset: -2.5, yOffset: 146, frameSkip: 3 });
         this.nyanPlayerSprite.rainbowOffset = 0;
 
@@ -107,7 +107,12 @@ class Game {
         this.powerUp = [];
 
         // game evt listeners
-        window.addEventListener('keydown', this.handleKeyboard.bind(this));
+        if (window.isMobile()) {
+            window.addEventListener('touchstart', this.handleTouch.bind(this));
+        }
+        else {
+            window.addEventListener('keydown', this.handleKeyboard.bind(this));
+        }
     }
 
     static setContext(cxt) {
@@ -125,7 +130,7 @@ class Game {
         Game.cxt.textAlign = 'start';
 
         this.playerRenderSprite = this.nyanPlayerSprite;
-        this.pos = { x: -70, y: -40 }; // to adjust for nyan cat dimentions
+        this.pos = { x: window.innerWidth < window.innerHeight ? -this.sc.hwidth + 40 : -70, y: -40 }; // to adjust for nyan cat dimentions
         this.score = 0;
         this.health = 3;
         this.checkDamage = true;
@@ -168,6 +173,18 @@ class Game {
         }
     }
 
+    handleTouch(evt) {
+        if (evt.touches[0].clientY < window.innerHeight / 2) {
+            if (this.pos.y > -this.sc.hheight) {
+                this.pos.y -= 20;
+            }
+        } else {
+            if (this.pos.y + 100 < this.sc.hheight) {
+                this.pos.y += 20;
+            }
+        }
+    }
+
     checkPlayerCollision(arr, i, sprite, callback) {
         if (arr[i].x < -this.sc.hwidth) {
             arr.splice(i, 1); // remove the out of screen obstacle
@@ -200,7 +217,6 @@ class Game {
             this.frames = 0;
 
             const chance = ~~(Math.random() * 100);
-            console.log(chance);
             if (chance > 95) {
                 this.powerUp.push({ x: this.sc.hwidth, y: Math.random() * (-this.sc.height) + this.sc.hheight, size: 50 });
             }
@@ -279,18 +295,23 @@ class Title {
         this.gameHandler = gameHandler;
         this.titleNyanSprite = new Sprite(ASSETS.nyanImg, 149.8, 95, 6, { frameSkip: 10 });
         this.titleSprite = new Sprite(ASSETS.titleImg, 256, 128, 4, { frameSkip: 5 });
-        this.playButton = new TexButton(ASSETS.playImg, -150, this.sc.hheight * 0.2, 300, 150, 128, 66, this.handOverToGame.bind(this));
+        const corrWidth = Math.min(300 * this.sc.width / 630, 300);
+        const corrHeight = Math.min(150 * this.sc.width / 630, 150);
+        this.playButton = new TexButton(ASSETS.playImg, -corrWidth - 10, this.sc.hheight * 0.2, corrWidth, corrHeight, 128, 66, this.handOverToGame.bind(this));
+        this.helpButton = new TexButton(ASSETS.helpImg, corrWidth + 10 - corrWidth, this.sc.hheight * 0.2, corrWidth, corrHeight, 130, 66, () => window.open('./Assets/nyanHelp.png', '_blank').focus());
 
         this.t = 0;
     }
 
     initTitle() {
         this.playButton.addListener();
+        this.helpButton.addListener();
         document.body.style.animationPlayState = 'paused';
     }
 
     cleanTitle() {
         this.playButton.removeListener();
+        this.helpButton.removeListener();
     }
 
     static setContext(cxt) {
@@ -313,12 +334,13 @@ class Title {
         this.titleSprite.drawImageAndUpdate(-150, -this.sc.hheight, 300, 180);
         this.titleNyanSprite.drawImageAndUpdate(-150, -this.sc.hheight * 0.5, 300, 180);
         this.playButton.update();
+        this.helpButton.update();
         Title.cxt.save();
         Title.cxt.font = '30px Tiny5';
         Title.cxt.fillStyle = 'rgb(255, 23, 116)';
         Title.cxt.textAlign = 'center';
-        Title.cxt.translate(200, -this.sc.hheight * 0.6);
-        Title.cxt.rotate(Math.PI / 4 * (Math.sin(this.t += 0.03) * -0.3 + 1));
+        Title.cxt.translate(this.sc.width < 600 ? 150 : 200, -this.sc.hheight * 0.6);
+        Title.cxt.rotate(Math.PI / 4 * (Math.sin(this.t += 0.03) * -0.3 + (this.sc.width < 600 ? 2 : 1)));
         Title.cxt.fillText("Made by Rouvik Maji!", 0, 0);
         Title.cxt.restore();
         Title.cxt.save();

@@ -52,12 +52,12 @@ class Button
     
     addListener()
     {
-        this.sc.addEventListener('mousedown', this.handleClick);
+        this.sc.addEventListener(window.isMobile() ? 'touchdown' : 'mousedown', this.handleClick);
     }
 
     removeListener()
     {
-        this.sc.removeEventListener('mousedown', this.handleClick);
+        this.sc.removeEventListener(window.isMobile() ? 'touchdown' : 'mousedown', this.handleClick);
     }
 
     handleClick(evt)
@@ -144,22 +144,44 @@ class TexButton
         this.frameSkip = frameSkip;
 
         this.handleClick = this.handleClick.bind(this);
+        this.handleTouch = this.handleTouch.bind(this);
     }
 
     addListener()
     {
-        this.sc.addEventListener('mousedown', this.handleClick);
+        if (window.isMobile()) {
+            this.sc.addEventListener('touchstart', this.handleTouch);
+        } else {
+            this.sc.addEventListener('mousedown', this.handleClick);
+        }
     }
 
     removeListener()
     {
-        this.sc.removeEventListener('mousedown', this.handleClick);
+        if (window.isMobile()) {
+            this.sc.removeEventListener('touchstart', this.handleTouch);
+        } else {
+            this.sc.removeEventListener('mousedown', this.handleClick);
+        }
     }
 
     handleClick(evt)
     {
         const cx = evt.clientX - this.sc.hwidth;
         const cy = evt.clientY - this.sc.hheight;
+
+        if (cx > this.pos.x && cx < this.pos.x + this.dimention.w &&
+            cy > this.pos.y && cy < this.pos.y + this.dimention.h) {
+                this.callback(this);
+            this.frames = 0;
+            this.sprite.index = 1; // hardcode to next button image
+        }
+    }
+
+    handleTouch(evt)
+    {
+        const cx = evt.touches[0].clientX - this.sc.hwidth;
+        const cy = evt.touches[0].clientY - this.sc.hheight;
 
         if (cx > this.pos.x && cx < this.pos.x + this.dimention.w &&
             cy > this.pos.y && cy < this.pos.y + this.dimention.h) {
