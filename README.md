@@ -1,8 +1,7 @@
 # My own simple web based Nyan cat game
 
 # Known issues:
-- No support for phone devices [fix coming through]
-- Viewport issues on certain tiny screen devices [throroughly check using google console, but still who knows]
+- Viewport issues on certain tiny screen devices [throroughly checked using google console, but still who knows]
 - Not enough Nyan 😼
 
 # Author
